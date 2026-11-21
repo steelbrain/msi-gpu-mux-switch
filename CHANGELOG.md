@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-11-21
+
 ### Added
 
 - Support for the MSI Stealth 16Studio A13VG with the MS-15F2 motherboard and
@@ -62,6 +64,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Embedded Windows manifest requesting Administrator privileges.
 - Windows CI, release archives, SHA-256 checksums, and tagged GitHub Releases.
 
-[Unreleased]: https://github.com/steelbrain/msi-gpu-mux-switch/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/steelbrain/msi-gpu-mux-switch/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/steelbrain/msi-gpu-mux-switch/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/steelbrain/msi-gpu-mux-switch/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/steelbrain/msi-gpu-mux-switch/releases/tag/v0.1.0
