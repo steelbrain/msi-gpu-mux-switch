@@ -226,7 +226,7 @@ write.
 | `--debug` | Collect read-only diagnostics and exit |
 | `--json` | Emit structured output and skip typed confirmation |
 | `--allow-unsupported-hardware` | Deliberately bypass the model/board gate; on an unrecognized machine, also skips the BIOS check |
-| `--allow-unvalidated-bios` | Deliberately permit a different BIOS on a recognized model and motherboard |
+| `--allow-unvalidated-bios` | Deliberately permit a BIOS that is not listed for a recognized model and motherboard |
 | `--help` | Show complete command help |
 
 The override flags are intended for deliberate characterization work. They do

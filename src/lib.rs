@@ -202,15 +202,15 @@ pub fn matching_profile(machine: &MachineInfo) -> Option<&'static HardwareProfil
     })
 }
 
-/// Returns the profile used to gate switching: an exact model, board, and BIOS
-/// match when one exists, otherwise the first profile with the same model and
-/// board. The caller compares the BIOS against the returned profile.
-pub fn switching_profile(machine: &MachineInfo) -> Option<&'static HardwareProfile> {
-    matching_profile(machine).or_else(|| {
-        HARDWARE_PROFILES
-            .iter()
-            .find(|profile| machine.model == profile.model && machine.board == profile.board)
-    })
+/// Returns the validated BIOS versions of every profile with the machine's
+/// model and board, in profile order. An empty list means the model and board
+/// are not recognized.
+pub fn validated_bios_versions(machine: &MachineInfo) -> Vec<&'static str> {
+    HARDWARE_PROFILES
+        .iter()
+        .filter(|profile| machine.model == profile.model && machine.board == profile.board)
+        .map(|profile| profile.bios)
+        .collect()
 }
 
 #[derive(Debug, Clone, Serialize)]
@@ -420,40 +420,47 @@ mod tests {
     }
 
     #[test]
-    fn switching_accepts_each_validated_vector_bios() {
-        for bios in ["E15M3IMS.116", "E15M3IMS.10E"] {
+    fn lists_every_validated_bios_for_a_model_and_board() {
+        for bios in ["E15M3IMS.116", "E15M3IMS.10E", "E15M3IMS.999"] {
             let machine = machine("Vector 16 HX AI A2XWIG", "MS-15M3", bios);
-            let profile = switching_profile(&machine).unwrap();
-            assert_eq!(profile.bios, bios);
+            assert_eq!(
+                validated_bios_versions(&machine),
+                ["E15M3IMS.116", "E15M3IMS.10E"]
+            );
+        }
+
+        let machine = machine("Stealth 16Studio A13VG", "MS-15F2", "E15F2IMS.999");
+        assert_eq!(validated_bios_versions(&machine), ["E15F2IMS.10F"]);
+    }
+
+    #[test]
+    fn every_profile_passes_both_the_switching_and_debug_gates() {
+        for profile in HARDWARE_PROFILES {
+            let machine = machine(profile.model, profile.board, profile.bios);
+            assert!(validated_bios_versions(&machine).contains(&profile.bios));
             assert_eq!(matching_profile(&machine), Some(profile));
         }
     }
 
     #[test]
-    fn switching_still_gates_an_unvalidated_vector_bios() {
+    fn unlisted_bios_on_a_recognized_board_fails_only_the_bios_gate() {
         let machine = machine("Vector 16 HX AI A2XWIG", "MS-15M3", "E15M3IMS.999");
-        let profile = switching_profile(&machine).unwrap();
-        assert_ne!(profile.bios, machine.bios);
+        let validated = validated_bios_versions(&machine);
+        assert!(!validated.is_empty());
+        assert!(!validated.contains(&machine.bios.as_str()));
         assert!(matching_profile(&machine).is_none());
     }
 
     #[test]
-    fn switching_profile_for_stealth_is_unchanged() {
-        let validated = machine("Stealth 16Studio A13VG", "MS-15F2", "E15F2IMS.10F");
-        assert_eq!(switching_profile(&validated).unwrap().bios, "E15F2IMS.10F");
-
-        let unvalidated = machine("Stealth 16Studio A13VG", "MS-15F2", "E15F2IMS.999");
-        assert_eq!(
-            switching_profile(&unvalidated).unwrap().bios,
-            "E15F2IMS.10F"
-        );
-        assert!(matching_profile(&unvalidated).is_none());
-    }
-
-    #[test]
-    fn switching_rejects_unknown_board() {
-        let machine = machine("Vector 16 HX AI A2XWIG", "MS-0000", "E15M3IMS.10E");
-        assert!(switching_profile(&machine).is_none());
+    fn unrecognized_model_or_board_has_no_validated_bios() {
+        for (model, board) in [
+            ("Vector 16 HX AI A2XWIG", "MS-0000"),
+            ("Unknown model", "MS-15M3"),
+            ("Vector 16 HX AI A2XWIG", "MS-15F2"),
+        ] {
+            let machine = machine(model, board, "E15M3IMS.10E");
+            assert!(validated_bios_versions(&machine).is_empty());
+        }
     }
 
     #[test]

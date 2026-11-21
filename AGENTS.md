@@ -60,11 +60,12 @@ variable layouts, ACPI results, or capabilities.
 Preserve these protections when changing the switching flow:
 
 - Gate normal writes to the exact model and board of a `HARDWARE_PROFILES`
-  entry, and gate the BIOS version separately against that entry. On a machine
-  that matches no entry, `--allow-unsupported-hardware` also covers the BIOS,
-  because no validated version exists to compare against. Read-only
-  diagnostics require an exact model, board, and BIOS match unless that flag
-  is given. Bypasses must remain explicit and conspicuously named.
+  entry, and gate the BIOS version separately against the BIOS versions of
+  every entry with that model and board. On a machine that matches no entry,
+  `--allow-unsupported-hardware` also covers the BIOS, because no validated
+  version exists to compare against. Read-only diagnostics require an exact
+  model, board, and BIOS match unless that flag is given. Bypasses must remain
+  explicit and conspicuously named.
 - Require an elevated Administrator process and online AC power.
 - Require the mode-specific typed confirmation for human-readable interactive
   switching. JSON mode deliberately skips this prompt for scripted use.

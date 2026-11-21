@@ -11,7 +11,8 @@ use msi_gpu_mux::{
     EXPECTED_VARIABLE_ATTRIBUTES, EXPECTED_VARIABLE_LENGTH, FirmwareInfo, FirmwareVariable,
     MsiAcpi, ac_power_online, backup_directory, is_elevated, privilege_requirement, query_machine,
     read_msi_variable, recovery_key_warning, sha256_hex, shutdown_command, stage_target,
-    switching_profile, trigger_value, verification_command, wait_for_keypress, write_msi_variable,
+    trigger_value, validated_bios_versions, verification_command, wait_for_keypress,
+    write_msi_variable,
 };
 use msi_gpu_mux::{Mode, StateSnapshot, collect_snapshot};
 use serde::Serialize;
@@ -39,7 +40,7 @@ struct Args {
     #[arg(long)]
     allow_unsupported_hardware: bool,
 
-    /// Deliberately permit a BIOS other than the characterized version on a
+    /// Deliberately permit a BIOS other than the characterized versions on a
     /// recognized model and board.
     #[arg(long)]
     allow_unvalidated_bios: bool,
@@ -325,9 +326,9 @@ fn run(args: Args, reporter: &Reporter) -> Result<RunOutcome> {
     }
 
     let machine = query_machine()?;
-    let profile = switching_profile(&machine);
+    let validated_bios = validated_bios_versions(&machine);
 
-    if profile.is_none() && !args.allow_unsupported_hardware {
+    if validated_bios.is_empty() && !args.allow_unsupported_hardware {
         bail!(
             "unsupported hardware: model '{}', board '{}'; \
              use the explicit override only after reviewing the firmware layout",
@@ -336,15 +337,21 @@ fn run(args: Args, reporter: &Reporter) -> Result<RunOutcome> {
         );
     }
 
-    if let Some(profile) = profile {
-        if machine.bios != profile.bios && !args.allow_unvalidated_bios {
-            bail!(
-                "BIOS '{}' is not the characterized '{}'; \
-                 use --allow-unvalidated-bios only after reviewing firmware changes",
-                machine.bios,
-                profile.bios
-            );
-        }
+    if !validated_bios.is_empty()
+        && !validated_bios.contains(&machine.bios.as_str())
+        && !args.allow_unvalidated_bios
+    {
+        let characterized = validated_bios
+            .iter()
+            .map(|bios| format!("'{bios}'"))
+            .collect::<Vec<_>>()
+            .join(", ");
+        bail!(
+            "BIOS '{}' is not characterized for this model and board \
+             (characterized: {characterized}); \
+             use --allow-unvalidated-bios only after reviewing firmware changes",
+            machine.bios
+        );
     }
 
     let initial_variable = read_msi_variable()?;
