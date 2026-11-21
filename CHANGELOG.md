@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- The release `SHA256SUMS` file uses LF line endings for every entry, so
+  `sha256sum -c SHA256SUMS` can verify the Windows archive. The v0.2.0 and
+  v0.3.0 files end the Windows entry with CRLF.
+
 ## [0.3.0] - 2026-11-21
 
 ### Added

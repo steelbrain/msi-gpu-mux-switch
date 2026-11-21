@@ -91,7 +91,8 @@ jobs:
         run: |
           set -euo pipefail
           cd dist
-          cat *.sha256 > SHA256SUMS
+          # The Windows checksum is written with CRLF; sha256sum -c needs LF.
+          cat *.sha256 | tr -d '\r' > SHA256SUMS
           rm *.sha256
 
       - name: Publish release
