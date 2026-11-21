@@ -13,23 +13,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Support for the MSI Stealth 16Studio A13VG with the MS-15F2 motherboard and
   BIOS E15F2IMS.10F. Switching has been tested on Linux; Windows switching on
-  this model is untested.
+  this model is untested. ([#1] by [@Dannyr87])
 - Support for BIOS E15M3IMS.10E on the MSI Vector 16 HX AI A2XWIG with the
   MS-15M3 motherboard. Switching between MSHybrid and discrete has been tested
   on Linux; integrated mode and Windows switching on this BIOS are untested.
-- Supported systems are now listed as model, motherboard, and BIOS profiles.
-  A model and motherboard can have more than one validated BIOS, and the BIOS
-  error names each of them.
+  ([#3] by [@rsd])
+- Supported systems are now listed as model, motherboard, and BIOS profiles
+  ([#1] by [@Dannyr87]). A model and motherboard can have more than one
+  validated BIOS ([#3] by [@rsd]), and the BIOS error names each of them.
 
 ### Changed
 
 - On a machine that matches no supported model and motherboard,
   `--allow-unsupported-hardware` now also skips the BIOS check.
   `--allow-unvalidated-bios` applies only to a recognized model and
-  motherboard.
+  motherboard. ([#1] by [@Dannyr87])
 - `--debug` and the debug report's `expected_hardware` field now also require
   the BIOS to match. A supported laptop running a different BIOS needs
-  `--allow-unsupported-hardware` to collect diagnostics.
+  `--allow-unsupported-hardware` to collect diagnostics. ([#1] by [@Dannyr87])
 
 ## [0.2.0] - 2026-08-31
 
@@ -68,3 +69,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [0.3.0]: https://github.com/steelbrain/msi-gpu-mux-switch/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/steelbrain/msi-gpu-mux-switch/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/steelbrain/msi-gpu-mux-switch/releases/tag/v0.1.0
+[#1]: https://github.com/steelbrain/msi-gpu-mux-switch/pull/1
+[#3]: https://github.com/steelbrain/msi-gpu-mux-switch/pull/3
+[@Dannyr87]: https://github.com/Dannyr87
+[@rsd]: https://github.com/rsd
