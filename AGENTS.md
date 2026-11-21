@@ -3,9 +3,9 @@
 ## Scope
 
 This repository contains a Rust command-line utility that implements GPU MUX
-diagnostics and switching on Windows and Linux for the characterized MSI Vector
-16 HX AI A2XWIG. The known motherboard is MS-15M3 and the validated BIOS
-versions are E15M3IMS.116 and E15M3IMS.10E.
+diagnostics and switching on Windows and Linux for the characterized MSI laptops
+listed in `HARDWARE_PROFILES` in `src/lib.rs`. Each entry is an exact model,
+motherboard, and BIOS combination.
 
 On Linux, UEFI access uses efivarfs and MSI ACPI access uses only the in-tree
 `msi-wmi-platform` driver's root-only debugfs interface. Do not add a direct AML

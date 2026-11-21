@@ -19,7 +19,7 @@ use serde::Serialize;
 use serde_json::Value;
 use serde_json::json;
 
-/// Inspect or change the GPU MUX mode on the characterized MSI MS-15M3.
+/// Inspect or change the GPU MUX mode on characterized MSI laptops.
 #[derive(Debug, Parser)]
 #[command(version, about)]
 struct Args {

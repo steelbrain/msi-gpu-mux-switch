@@ -6,7 +6,7 @@ rust-version = "1.85"
 authors = ["Anees Iqbal <hello@aneesiqbal.ai>"]
 license = "MIT"
 readme = "README.md"
-description = "Inspect and switch GPU MUX modes on the characterized MSI Vector 16 HX AI A2XWIG"
+description = "Inspect and switch GPU MUX modes on characterized MSI laptops"
 keywords = ["msi", "gpu", "mux", "windows", "linux"]
 categories = ["command-line-utilities", "hardware-support"]
 default-run = "msi-mux-switch"
@@ -38,4 +38,11 @@ embed-resource = "3.0.11"
 [[bin]]
 name = "msi-mux-switch"
 path = "src/bin/msi-mux-switch.rs"
+# Keep the binary out of `cargo test`: on Windows its test harness would also
+# embed the Administrator manifest and need an elevated shell to run.
 test = false
+
+# Only the binary uses clap and serde_json, and `cargo test` does not build it,
+# so Cargo would report both as unused.
+[lints.cargo]
+unused_dependencies = "allow"

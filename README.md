@@ -1,7 +1,8 @@
 # MSI GPU MUX Switch
 
 `msi-mux-switch` is a Windows and Linux command-line utility for inspecting and
-changing the GPU MUX mode on the MSI Vector 16 HX AI A2XWIG. It implements the
+changing the GPU MUX mode on the MSI laptops listed under
+[Hardware support](#hardware-support). It implements the
 switching flow without requiring MSI Center.
 
 Available modes:
@@ -28,7 +29,7 @@ The firmware contract is characterized for exactly these systems:
 | Motherboard | MS-15M3 |
 | BIOS | E15M3IMS.116 |
 | Architecture | AMD64 |
-| Operating system | Windows or Linux |
+| Operating system | Windows or Linux (untested) |
 
 | Component | Required value |
 | --- | --- |
@@ -40,7 +41,7 @@ The firmware contract is characterized for exactly these systems:
 
 | Component | Required value |
 | --- | --- |
-| Laptop | Stealth 16Studio A13VG |
+| Laptop | MSI Stealth 16Studio A13VG |
 | Motherboard | MS-15F2 |
 | BIOS | E15F2IMS.10F |
 | Architecture | AMD64 |
@@ -51,12 +52,6 @@ these systems. The BIOS is then checked separately against that system's
 validated versions. Diagnostics with `--debug` require the model, motherboard,
 and BIOS to all match. Development override flags exist, but they do not turn
 an unknown machine or BIOS into a supported configuration.
-
-Windows switching is the original characterized path. Linux diagnostics have
-been verified on the supported laptop. The Linux switching path is implemented
-against the in-tree kernel interface and passes synthetic tests, but has not
-yet been exercised as a live firmware write; treat it as experimental until
-that validation is completed.
 
 ## Installation
 
