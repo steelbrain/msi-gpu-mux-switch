@@ -32,6 +32,14 @@ The firmware contract is characterized for exactly these systems:
 
 | Component | Required value |
 | --- | --- |
+| Laptop | MSI Vector 16 HX AI A2XWIG |
+| Motherboard | MS-15M3 |
+| BIOS | E15M3IMS.10E |
+| Architecture | AMD64 |
+| Operating system | Windows (untested) or Linux |
+
+| Component | Required value |
+| --- | --- |
 | Laptop | Stealth 16Studio A13VG |
 | Motherboard | MS-15F2 |
 | BIOS | E15F2IMS.10F |
@@ -40,7 +48,7 @@ The firmware contract is characterized for exactly these systems:
 
 Normal switching requires an exact model and motherboard match with one of
 these systems. The BIOS is then checked separately against that system's
-validated version. Diagnostics with `--debug` require the model, motherboard,
+validated versions. Diagnostics with `--debug` require the model, motherboard,
 and BIOS to all match. Development override flags exist, but they do not turn
 an unknown machine or BIOS into a supported configuration.
 

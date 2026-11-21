@@ -9,10 +9,9 @@ use chrono::Local;
 use clap::{Parser, error::ErrorKind};
 use msi_gpu_mux::{
     EXPECTED_VARIABLE_ATTRIBUTES, EXPECTED_VARIABLE_LENGTH, FirmwareInfo, FirmwareVariable,
-    HARDWARE_PROFILES, MsiAcpi, ac_power_online, backup_directory, is_elevated,
-    privilege_requirement, query_machine, read_msi_variable, recovery_key_warning, sha256_hex,
-    shutdown_command, stage_target, trigger_value, verification_command, wait_for_keypress,
-    write_msi_variable,
+    MsiAcpi, ac_power_online, backup_directory, is_elevated, privilege_requirement, query_machine,
+    read_msi_variable, recovery_key_warning, sha256_hex, shutdown_command, stage_target,
+    switching_profile, trigger_value, verification_command, wait_for_keypress, write_msi_variable,
 };
 use msi_gpu_mux::{Mode, StateSnapshot, collect_snapshot};
 use serde::Serialize;
@@ -326,9 +325,7 @@ fn run(args: Args, reporter: &Reporter) -> Result<RunOutcome> {
     }
 
     let machine = query_machine()?;
-    let profile = HARDWARE_PROFILES
-        .iter()
-        .find(|profile| machine.model == profile.model && machine.board == profile.board);
+    let profile = switching_profile(&machine);
 
     if profile.is_none() && !args.allow_unsupported_hardware {
         bail!(
