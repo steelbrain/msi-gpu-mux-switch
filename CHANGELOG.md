@@ -13,9 +13,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   BIOS E15F2IMS.10F. Switching has been tested on Linux; Windows switching on
   this model is untested.
 - Supported systems are now listed as model, motherboard, and BIOS profiles.
+- Support for BIOS E15M3IMS.10E on the MSI Vector 16 HX AI A2XWIG with the
+  MS-15M3 motherboard. Switching has been tested on Linux; Windows switching
+  on this BIOS is untested.
 
 ### Changed
 
+- Switching now prefers the profile whose model, motherboard, and BIOS all
+  match, so a model and motherboard can list more than one validated BIOS.
+  An unlisted BIOS is still checked against the first matching profile.
 - On a machine that matches no supported model and motherboard,
   `--allow-unsupported-hardware` now also skips the BIOS check.
   `--allow-unvalidated-bios` applies only to a recognized model and
